@@ -75,8 +75,8 @@ int pide_opcion(int rango){
   int opcion;
   scanf("%i", &opcion);
   while((opcion > rango) || (opcion < 1)){
-    limpia_buffer();
     printf("opcion no valida, intente otra vez:\n");
+    limpia_buffer();
     scanf("%i", &opcion);
   }
   return opcion;

@@ -47,3 +47,17 @@ void liberar_pila(struct transaccion* pila){
     pila = tmp;
   }
 }
+
+int total_cuenta(struct transaccion *transacciones){
+  int total = 0;
+  struct transaccion *it = transacciones;
+  while(it != NULL){
+    if(it->codigo_operacion == 101) {
+      total = total + it->monto;
+    }else{
+      total = total - it->monto;
+    }
+    it = it->next;
+  }
+  return total;
+}

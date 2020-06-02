@@ -207,10 +207,12 @@ int main(void){
 
         long monto_trans;
         printf("Ingrese el monto\n");
+        fflush(stdin);
         scanf("%li", &monto_trans);
 
         agregar_elemento_pila(&(coincidencias->transacciones), codigo_trans, monto_trans);
         imprime_transacciones(coincidencias->transacciones);
+        printf("total en cuenta: %i", total_cuenta(coincidencias->transacciones));
         pausa_enter();
         break;
 
