@@ -18,9 +18,9 @@ int main(void){
 
   char buffer[100];
   int bufferid;
-  int exit = 0;
   int aux_trans;
   int codigo_trans;
+  int exit = 0;
   ESTADO_HASH = 0;
 
   while(exit == 0){

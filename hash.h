@@ -9,12 +9,11 @@ struct cliente{
   char nombre[60];
   char apellido[60];
   char mail[80];
-  char genero[10]; 
+  char genero[10];
   char direccion[100];
   struct transaccion* transacciones;
   struct cliente* next;
 };
-
 
 void crear_hash();
 void agregar_elemento_hash(struct cliente* nuevo);

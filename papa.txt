@@ -1,0 +1,4 @@
+id	nombre	apellido	email	genero	direccion
+198923923	Pedro	Fresno	peyoner@gmail.com	Male	Consistorial 3535, casa 30
+19892	Roma	Felicia	romafliz99homail.com	Female	Las gacelas 3234
+17890	Piter Pol	Almagro	ppamargo_l@gmail.com	Male	Avenida las trifulcas 34
