@@ -9,7 +9,7 @@ void crear_pila(struct transaccion** transacciones){
 }
 
 void agregar_elemento_pila(struct transaccion** transacciones, int codigo, long monto){
-  
+
   struct transaccion* nueva_transaccion = malloc(sizeof(struct transaccion));
   nueva_transaccion->codigo_operacion = codigo;
   nueva_transaccion->monto = monto;
@@ -25,16 +25,18 @@ void agregar_elemento_pila(struct transaccion** transacciones, int codigo, long 
   }
 }
 
-void remover_elemento_pila(struct transaccion** transacciones){
+int remover_elemento_pila(struct transaccion** transacciones){
 
   if(*transacciones == NULL){
     printf("no hay transacciones por remover");
+    return 0;
 
   }else{
     struct transaccion* tmp = (*transacciones)->next;
     free(*transacciones);
     *transacciones = tmp;
   }
+  return 1;
 }
 
 void liberar_pila(struct transaccion* pila){

@@ -8,6 +8,8 @@
 #include "lista.h"
 #include "interfaz.h"
 
+#define BUFF 1000
+
 struct cliente* buscar_cliente(char palabra_clave[100], char tipo_de_busqueda);
 struct cliente* buscar_por_id(int id);
 int leer_archivo(char *nombre_archivo);
@@ -16,10 +18,8 @@ void siguente_elemento(FILE* archivo, char *a_rellenar);
 
 int main(void){
 
-  char buffer[100];
+  char buffer[BUFF];
   int bufferid;
-  int aux_trans;
-  int codigo_trans;
   int exit = 0;
   ESTADO_HASH = 0;
 
@@ -31,11 +31,11 @@ int main(void){
     printf("3-  Buscar cliente\n");
     printf("4-  Eliminar cliente\n");
     printf("5-  Agregar transacciones\n");
+    printf("6-  Deshacer ultima trnasaccion cliente\n");
     printf("9-  Cerrar programa\n");
 
     fflush(stdin);
-    int opcion;
-    scanf("%i",&opcion);
+    int opcion = pide_opcion(9);
 
     switch(opcion){
 
@@ -54,9 +54,7 @@ int main(void){
         scanf("%s", buffer);
 
         if(leer_archivo(buffer) == 0){
-          system("clear");
-          printf("archivo cargado con exito\n");
-            sleep(1);
+          mensaje_feedback("archivo cargado con exito\n");
         }
         break;
 
@@ -89,12 +87,13 @@ int main(void){
         printf("\n Direccion: ");
         scanf("%s", nuevo->direccion);
 
+        crear_pila(&(nuevo->transacciones));
+
         if(ESTADO_HASH == 0){
           crear_hash();
         }
         agregar_elemento_hash(nuevo);
-        printf("cliente agregado\n");
-        sleep(1);
+        mensaje_feedback("cleinte agregado");
 
         break;
 
@@ -103,15 +102,14 @@ int main(void){
         printf("1. Buscar cliente por apellido\n");
         printf("2. Buscar cliente por nombre\n");
         printf("3. Buscar cliente por rut\n");
-        int opcion_busqueda;
-        scanf("%i", &opcion_busqueda);
+        int opcion_busqueda = pide_opcion(3);
 
         struct cliente* coincidencias;
 
         switch(opcion_busqueda){
 
           case 1: // buscar por apellido
-
+            printf("ingrese apellido: ");
             scanf("%s", buffer);
             coincidencias = buscar_cliente(buffer, 'a');
             if(coincidencias == NULL){
@@ -126,7 +124,7 @@ int main(void){
             break;
 
           case 2: // buscar por nombre
-
+            printf("ingrese nombre: ");
             scanf("%s", buffer);
             coincidencias = buscar_cliente(buffer, 'n');
             if(coincidencias == NULL){
@@ -141,7 +139,7 @@ int main(void){
             break;
 
           case 3: // buscar por id
-
+            printf("ingrese id: ");
             scanf("%i", &bufferid);
             coincidencias = buscar_por_id(bufferid);
             if(coincidencias == NULL){
@@ -178,9 +176,7 @@ int main(void){
 
         scanf("%i",&bufferid);
         if(remover_elemento_hash(buffer, bufferid)){
-          system("clear");
-          printf("Cliente eliminado satisfactoriamente\n");
-          sleep(1);
+          mensaje_feedback("Cliente eliminado satisfactoriamente\n");
         }
         liberar_lista(coincidencias);
 
@@ -206,8 +202,8 @@ int main(void){
         coincidencias = buscar_por_id(bufferid);
         printf("1-  Deposito\n");
         printf("2-  Retiro\n");
-        scanf("%i",&aux_trans); // crear funcion para pedir introduccion segun opciones disponibles
-        codigo_trans = 1 + aux_trans*100;
+        int opcion_trans = pide_opcion(2); // crear funcion para pedir introduccion segun opciones disponibles
+        int codigo_trans = 1 + opcion_trans*100;
 
         long monto_trans;
         printf("Ingrese el monto\n");
@@ -218,6 +214,27 @@ int main(void){
         pausa_enter();
         break;
 
+      case 6: // Eliminar ultima transaccion
+        printf("Ingrese el apellido del cliente: ");
+
+        scanf("%s", buffer);
+        coincidencias = buscar_cliente(buffer, 'a');
+        if(coincidencias == NULL){
+          printf("no se han encontrado coincidencias para %s\n", buffer);
+          pausa_enter();
+          break;
+        }else{
+          imprime_lista(coincidencias);
+        }
+
+        printf("Ingrese el RUT del cliente:\n");
+
+        scanf("%i",&bufferid);
+        coincidencias = buscar_por_id(bufferid);
+        if(remover_elemento_pila(&(coincidencias->transacciones))){
+          mensaje_feedback("ultima transaccion ha sido removida\n");
+        }
+        break;
       case 9:
         exit = 1;
         system("clear");
