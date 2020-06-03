@@ -50,7 +50,16 @@ void imprime_transacciones(struct transaccion* it){
   }
 }
 
-void imprime_cliente(struct cliente* cliente){
+void imprime_cliente(struct cliente* it, int indice){
+  printf("\n");
+  printf("  [%i]--------------------------------\n",indice);
+  printf("  | cliente:  %s %s\n", it->nombre,it->apellido);
+  printf("  |                 \n");
+  printf("  | id:       %i\n",it->id);
+  printf("  -----------------------------------\n\n");
+}
+
+void imprime_cliente_detalle(struct cliente* cliente){
   if(cliente == NULL){
     printf("el cliente no extiste\n");
   }else{
@@ -60,6 +69,7 @@ void imprime_cliente(struct cliente* cliente){
     printf("mail:       %s\n", cliente->mail);
     printf("direccion:  %s\n", cliente->direccion);
     printf("En cuenta:  $ %i\n", total_cuenta(cliente->transacciones));
+    printf("  Transacciones:\n");
     imprime_transacciones(cliente->transacciones);
   }
 }

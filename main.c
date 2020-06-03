@@ -9,8 +9,9 @@
 #include "interfaz.h"
 
 #define BUFF 1000
+#define BUF_COINCIDENCIAS 10
 
-struct cliente* buscar_cliente(char palabra_clave[100], char tipo_de_busqueda);
+struct cliente** buscar_cliente(char palabra_clave[100], char tipo_de_busqueda, int* n_coincidencias);
 struct cliente* buscar_por_id(int id);
 int leer_archivo(char *nombre_archivo);
 void siguente_elemento(FILE* archivo, char *a_rellenar);
@@ -22,6 +23,8 @@ int main(void){
   int bufferid;
   int exit = 0;
   ESTADO_HASH = 0;
+  struct cliente* seleccion;
+  int n_coincidencias;
 
   while(exit == 0){
     system("clear");
@@ -106,53 +109,57 @@ int main(void){
         printf("3. Buscar cliente por rut\n");
         int opcion_busqueda = pide_opcion(3);
 
-        struct cliente* coincidencias;
+        struct cliente** coincidencias;
 
         switch(opcion_busqueda){
 
           case 1: // buscar por apellido
-            printf("ingrese apellido: ");
+            printf("Ingrese el apellido del cliente: ");
+
             scanf("%s", buffer);
             Formato_Titulos(buffer);
-            coincidencias = buscar_cliente(buffer, 'a');
+            coincidencias = buscar_cliente(buffer, 'a',&n_coincidencias);
             if(coincidencias == NULL){
               printf("no se han encontrado coincidencias para %s\n", buffer);
               pausa_enter();
               break;
-            }else{
-              imprime_lista(coincidencias);
-              pausa_enter();
             }
-            liberar_lista(coincidencias);
+            printf("\n    SELECCIONE CLIENTE PARA VER DETALLE:\n");
+            int opcion3 = pide_opcion(n_coincidencias);
+            seleccion = coincidencias[opcion3-1];
+            imprime_cliente_detalle(seleccion);
+            pausa_enter();
             break;
 
           case 2: // buscar por nombre
-            printf("ingrese nombre: ");
-            fflush(stdin);
+            printf("Ingrese el nombre del cliente: ");
+
             scanf("%s", buffer);
             Formato_Titulos(buffer);
-            coincidencias = buscar_cliente(buffer, 'n');
+            coincidencias = buscar_cliente(buffer, 'n', &n_coincidencias);
             if(coincidencias == NULL){
               printf("no se han encontrado coincidencias para %s\n", buffer);
               pausa_enter();
               break;
-            }else{
-              imprime_lista(coincidencias);
-              pausa_enter();
             }
-            liberar_lista(coincidencias);
+            printf("\n    SELECCIONE CLIENTE PARA VER DETALLE:\n");
+            opcion3 = pide_opcion(n_coincidencias);
+            seleccion = coincidencias[opcion3-1];
+            imprime_cliente_detalle(seleccion);
+            pausa_enter();
             break;
 
           case 3: // buscar por id
             printf("ingrese id: ");
+
             scanf("%i", &bufferid);
-            coincidencias = buscar_por_id(bufferid);
+            struct cliente* buscado  = buscar_por_id(bufferid);
             if(coincidencias == NULL){
               printf("no se han encontrado coincidencias para %i\n", bufferid);
               pausa_enter();
               break;
             }else{
-              imprime_cliente(coincidencias);
+              imprime_cliente_detalle(buscado);
               pausa_enter();
             }
             break;
@@ -163,49 +170,44 @@ int main(void){
 
       case 4: // Eliminar cliente
 
-        printf("Ingrese el apellido del cliente:\n");
+        printf("Ingrese el apellido del cliente: ");
 
         scanf("%s", buffer);
         Formato_Titulos(buffer);
-        coincidencias = buscar_cliente(buffer, 'a');
+        coincidencias = buscar_cliente(buffer, 'a',&n_coincidencias);
         if(coincidencias == NULL){
           printf("no se han encontrado coincidencias para %s\n", buffer);
           pausa_enter();
           break;
-        }else{
-          imprime_lista(coincidencias);
         }
 
+        printf("seleccione al cliente:\n");
+        int opcion4 = pide_opcion(n_coincidencias);
+        seleccion = coincidencias[opcion4-1];
 
-        printf("Ingrese el RUT del cliente a eliminar: ");
-        scanf("%i",&bufferid);
-
-        if(remover_elemento_hash(buffer, bufferid)){
+        if(remover_elemento_hash(seleccion->apellido,seleccion->id)){
           mensaje_feedback("Cliente eliminado satisfactoriamente\n");
         }
-        liberar_lista(coincidencias);
 
         break;
 
       case 5: // Agregar transacciones
 
-        printf("Ingrese el apellido del cliente:\n");
+        printf("Ingrese el apellido del cliente: ");
 
         scanf("%s", buffer);
         Formato_Titulos(buffer);
-        coincidencias = buscar_cliente(buffer, 'a');
+        coincidencias = buscar_cliente(buffer, 'a',&n_coincidencias);
         if(coincidencias == NULL){
           printf("no se han encontrado coincidencias para %s\n", buffer);
           pausa_enter();
           break;
-        }else{
-          imprime_lista(coincidencias);
         }
 
-        printf("Ingrese el RUT del cliente:\n");
-        struct cliente* coincidencia;
-        scanf("%i",&bufferid);
-        coincidencia = buscar_por_id(bufferid);
+        printf("seleccione al cliente:\n");
+        int opcion5 = pide_opcion(n_coincidencias);
+        seleccion = coincidencias[opcion5-1];
+
         printf("1-  Deposito\n");
         printf("2-  Retiro\n");
         int opcion_trans = pide_opcion(2);
@@ -215,38 +217,33 @@ int main(void){
         printf("Ingrese el monto\n");
         fflush(stdin);
         scanf("%li", &monto_trans);
-        if(codigo_trans == 201 && monto_trans  > total_cuenta(coincidencia->transacciones)){
+        if(codigo_trans == 201 && monto_trans  > total_cuenta(seleccion->transacciones)){
             printf("El monto a retirar excede el maximo\n");
         }else{
-          agregar_elemento_pila(&(coincidencia->transacciones), codigo_trans, monto_trans);
+          agregar_elemento_pila(&(seleccion->transacciones), codigo_trans, monto_trans);
           printf("transaccion hecha\n");
         }
 
-        printf("total en cuenta: %i\n", total_cuenta(coincidencia->transacciones));
+        printf("total en cuenta: %i\n", total_cuenta(seleccion->transacciones));
         pausa_enter();
         break;
 
       case 6: // Eliminar ultima transaccion
         printf("Ingrese el apellido del cliente: ");
 
-        int n_coincidencias;
         scanf("%s", buffer);
         Formato_Titulos(buffer);
-        coincidencias = buscar_cliente(buffer, 'a');
+        coincidencias = buscar_cliente(buffer, 'a',&n_coincidencias);
         if(coincidencias == NULL){
           printf("no se han encontrado coincidencias para %s\n", buffer);
           pausa_enter();
           break;
-        }else{
-          n_coincidencias = imprime_lista(coincidencias);
         }
 
         printf("seleccione al cliente:\n");
-        struct cliente* seleccion = coincidencias;
         int opcion6 = pide_opcion(n_coincidencias);
-        for(int i = 1; i < opcion6; i++){
-          seleccion = seleccion->next;
-        }
+        seleccion = coincidencias[opcion6-1];
+
         if(remover_elemento_pila(&(seleccion->transacciones))){
           mensaje_feedback("ultima transaccion ha sido removida\n");
           printf("lista de transacciones:\n");
@@ -268,12 +265,11 @@ int main(void){
 }
 
 
-struct cliente* buscar_cliente(char palabra_clave[100], char tipo_de_busqueda){
-
-  struct cliente* coincidencias;
+struct cliente** buscar_cliente(char palabra_clave[100], char tipo_de_busqueda, int *n_coincidencias){
+//crea un arreglo de punteros de los elementos del hash que coincidan
+  struct cliente** coincidencias = malloc(BUF_COINCIDENCIAS*sizeof(struct cliente*));
   struct cliente* it;
-  crear_lista(&coincidencias);
-
+  *n_coincidencias = 0;
   if(tipo_de_busqueda == 'n'){ //busqueda por nombre
 
     for(int i = 0; i<26; i++){
@@ -281,8 +277,10 @@ struct cliente* buscar_cliente(char palabra_clave[100], char tipo_de_busqueda){
 
       while(it != NULL){
 
-        if(strncmp(it->nombre, palabra_clave, 100) == 0){
-          agregar_elemento_lista(&coincidencias, it);
+        if(strncmp(it->nombre, palabra_clave, 100) == 0 && *n_coincidencias < BUF_COINCIDENCIAS){
+          coincidencias[*n_coincidencias] = it;
+          (*n_coincidencias)++;
+          imprime_cliente(it, *n_coincidencias);
         }
         it = it->next;
       }
@@ -294,8 +292,11 @@ struct cliente* buscar_cliente(char palabra_clave[100], char tipo_de_busqueda){
     it = hash_apellido[indice_abecedario];
 
       while(it != NULL){
-        if(strncmp(it->apellido, palabra_clave, 100) == 0){
-          agregar_elemento_lista(&coincidencias, it);
+
+        if(strncmp(it->apellido, palabra_clave, 100) == 0 && *n_coincidencias < BUF_COINCIDENCIAS){
+          coincidencias[*n_coincidencias] = it;
+          (*n_coincidencias)++;
+          imprime_cliente(it, *n_coincidencias);
         }
         it = it->next;
       }

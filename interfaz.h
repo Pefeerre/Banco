@@ -1,7 +1,8 @@
 void imprime_apellidos(char desde, char hasta);
 int imprime_lista(struct cliente* lista);
 void imprime_transacciones(struct transaccion* it);
-void imprime_cliente(struct cliente* cliente);
+void imprime_cliente(struct cliente* cliente, int indice);
+void imprime_cliente_detalle(struct cliente* cliente);
 void pausa_enter();
 void limpia_buffer();
 void mensaje_feedback(char mensaje[200]);
