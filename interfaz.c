@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 #include <unistd.h>
 #include "hash.h"
 #include "interfaz.h"
@@ -67,12 +68,13 @@ void pausa_enter(){
 
 void mensaje_feedback(char mensaje[200]){
   system("clear");
-  printf("%s", mensaje);
+  printf("%s\n", mensaje);
   sleep(1);
 }
 
 int pide_opcion(int rango){
   int opcion;
+  fflush(stdin);
   scanf("%i", &opcion);
   while((opcion > rango) || (opcion < 1)){
     printf("opcion no valida, intente otra vez:\n");
@@ -84,4 +86,18 @@ int pide_opcion(int rango){
 
 void limpia_buffer(){
     while( getchar() != '\n');
+}
+
+void Formato_Titulos(char titulo[100]){
+  char Titulo[100];
+  int i;
+  Titulo[0] = toupper(titulo[0]);
+  for(i = 1; i < strlen(titulo); i++){
+    Titulo[i] = tolower(titulo[i]);
+  }
+  while(i < 100){
+    Titulo[i] = 0;
+    i++;
+  }
+  strcpy(titulo, Titulo);
 }

@@ -8,7 +8,7 @@ all: Banco
 Banco: main.o hash.o lista.o pila.o interfaz.o
 	gcc main.o hash.o lista.o pila.o interfaz.o -o Banco
 
-hash.o: hash.c lista.h pila.h 
+hash.o: hash.c lista.h pila.h interfaz.h
 	gcc -c hash.c
 
 lista.o: lista.c hash.h
@@ -24,5 +24,5 @@ main.o: main.c hash.h lista.h pila.h interfaz.h
 	gcc -c main.c
 
 
-clean: 
+clean:
 	rm -f *.o Banco

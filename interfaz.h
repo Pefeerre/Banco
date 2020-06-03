@@ -6,3 +6,4 @@ void pausa_enter();
 void limpia_buffer();
 void mensaje_feedback(char mensaje[200]);
 int pide_opcion(int rango);
+void Formato_Titulos(char titlulo[100]);

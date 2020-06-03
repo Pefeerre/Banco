@@ -8,7 +8,7 @@ void crear_lista(struct cliente** lista){
 
 int agregar_elemento_lista(struct cliente** lista, struct cliente *elemento){
   struct cliente* nuevo_elemento = malloc(sizeof(struct cliente));
-  nuevo_elemento = elemento;
+  *nuevo_elemento = *elemento;
 
 
   if(*lista == NULL){

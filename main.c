@@ -34,7 +34,6 @@ int main(void){
     printf("6-  Deshacer ultima trnasaccion cliente\n");
     printf("9-  Cerrar programa\n");
 
-    fflush(stdin);
     int opcion = pide_opcion(9);
 
     switch(opcion){
@@ -70,14 +69,17 @@ int main(void){
         while( getchar() != '\n');
         printf("\n Nombre: ");
         scanf("%s", nuevo->nombre);
+        Formato_Titulos(nuevo->nombre);
 
         while( getchar() != '\n');
         printf("\n Apellido: ");
         scanf("%s", nuevo->apellido);
+        Formato_Titulos(nuevo->apellido);
 
         while( getchar() != '\n');
         printf("\n Sexo: ");
         scanf("%s", nuevo->genero);
+        Formato_Titulos(nuevo->genero);
 
         while( getchar() != '\n');
         printf("\n mail: ");
@@ -93,7 +95,7 @@ int main(void){
           crear_hash();
         }
         agregar_elemento_hash(nuevo);
-        mensaje_feedback("cleinte agregado");
+        mensaje_feedback("cliente agregado");
 
         break;
 
@@ -111,6 +113,7 @@ int main(void){
           case 1: // buscar por apellido
             printf("ingrese apellido: ");
             scanf("%s", buffer);
+            Formato_Titulos(buffer);
             coincidencias = buscar_cliente(buffer, 'a');
             if(coincidencias == NULL){
               printf("no se han encontrado coincidencias para %s\n", buffer);
@@ -125,7 +128,9 @@ int main(void){
 
           case 2: // buscar por nombre
             printf("ingrese nombre: ");
+            fflush(stdin);
             scanf("%s", buffer);
+            Formato_Titulos(buffer);
             coincidencias = buscar_cliente(buffer, 'n');
             if(coincidencias == NULL){
               printf("no se han encontrado coincidencias para %s\n", buffer);
@@ -147,10 +152,9 @@ int main(void){
               pausa_enter();
               break;
             }else{
-              imprime_lista(coincidencias);
+              imprime_cliente(coincidencias);
               pausa_enter();
             }
-            liberar_lista(coincidencias);
             break;
 
         }
@@ -162,6 +166,7 @@ int main(void){
         printf("Ingrese el apellido del cliente:\n");
 
         scanf("%s", buffer);
+        Formato_Titulos(buffer);
         coincidencias = buscar_cliente(buffer, 'a');
         if(coincidencias == NULL){
           printf("no se han encontrado coincidencias para %s\n", buffer);
@@ -172,7 +177,7 @@ int main(void){
         }
 
 
-        printf("Ingrese el RUT del cliente:\n");
+        printf("Ingrese el RUT del cliente: %s\n", buffer);
 
         scanf("%i",&bufferid);
         if(remover_elemento_hash(buffer, bufferid)){
@@ -187,6 +192,7 @@ int main(void){
         printf("Ingrese el apellido del cliente:\n");
 
         scanf("%s", buffer);
+        Formato_Titulos(buffer);
         coincidencias = buscar_cliente(buffer, 'a');
         if(coincidencias == NULL){
           printf("no se han encontrado coincidencias para %s\n", buffer);
@@ -197,22 +203,26 @@ int main(void){
         }
 
         printf("Ingrese el RUT del cliente:\n");
-
+        struct cliente* coincidencia;
         scanf("%i",&bufferid);
-        coincidencias = buscar_por_id(bufferid);
+        coincidencia = buscar_por_id(bufferid);
         printf("1-  Deposito\n");
         printf("2-  Retiro\n");
-        int opcion_trans = pide_opcion(2); // crear funcion para pedir introduccion segun opciones disponibles
+        int opcion_trans = pide_opcion(2);
         int codigo_trans = 1 + opcion_trans*100;
 
         long monto_trans;
         printf("Ingrese el monto\n");
         fflush(stdin);
         scanf("%li", &monto_trans);
+        if(codigo_trans == 201 && monto_trans  > total_cuenta(coincidencia->transacciones)){
+            printf("El monto a retirar excede el maximo\n");
+        }else{
+          agregar_elemento_pila(&(coincidencia->transacciones), codigo_trans, monto_trans);
+          printf("transaccion hecha\n");
+        }
 
-        agregar_elemento_pila(&(coincidencias->transacciones), codigo_trans, monto_trans);
-        imprime_transacciones(coincidencias->transacciones);
-        printf("total en cuenta: %i", total_cuenta(coincidencias->transacciones));
+        printf("total en cuenta: %i\n", total_cuenta(coincidencia->transacciones));
         pausa_enter();
         break;
 
@@ -264,8 +274,6 @@ struct cliente* buscar_cliente(char palabra_clave[100], char tipo_de_busqueda){
       while(it != NULL){
 
         if(strncmp(it->nombre, palabra_clave, 100) == 0){
-          struct cliente* buscado = malloc(sizeof(struct cliente));
-          *buscado = *it;
           agregar_elemento_lista(&coincidencias, it);
         }
         it = it->next;
@@ -279,9 +287,7 @@ struct cliente* buscar_cliente(char palabra_clave[100], char tipo_de_busqueda){
 
       while(it != NULL){
         if(strncmp(it->apellido, palabra_clave, 100) == 0){
-          struct cliente* buscado = malloc(sizeof(struct cliente));
-          *buscado = *it;
-          agregar_elemento_lista(&coincidencias, buscado);
+          agregar_elemento_lista(&coincidencias, it);
         }
         it = it->next;
       }
@@ -344,7 +350,7 @@ int leer_archivo(char *nombre_archivo){
   fclose(archivo);
   return 0;
 }
-void siguente_elemento(FILE* archivo, char *a_rellenar){ //lee hasta el siguente tab y genera un espacio de tamaño ajustado para guardar el dato
+void siguente_elemento(FILE* archivo, char *a_rellenar){ //lee hasta el siguente tab
   char buffer[200];
   int i = 0;
 
@@ -355,10 +361,11 @@ void siguente_elemento(FILE* archivo, char *a_rellenar){ //lee hasta el siguente
     }
     i++;
   }
-  buffer[i] = 0; //indica final del string
-
-  if(i != 0){
-    strcpy(a_rellenar, buffer);
+  while(i<100){
+      buffer[i] = 0; //indica final del string
+      i++;
   }
+
+    strcpy(a_rellenar, buffer);
 
 }
