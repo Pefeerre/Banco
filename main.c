@@ -177,9 +177,9 @@ int main(void){
         }
 
 
-        printf("Ingrese el RUT del cliente: %s\n", buffer);
-
+        printf("Ingrese el RUT del cliente a eliminar: ");
         scanf("%i",&bufferid);
+
         if(remover_elemento_hash(buffer, bufferid)){
           mensaje_feedback("Cliente eliminado satisfactoriamente\n");
         }
@@ -187,7 +187,7 @@ int main(void){
 
         break;
 
-      case 5: // Agrgar transacciones
+      case 5: // Agregar transacciones
 
         printf("Ingrese el apellido del cliente:\n");
 
@@ -230,6 +230,7 @@ int main(void){
         printf("Ingrese el apellido del cliente: ");
 
         scanf("%s", buffer);
+        Formato_Titulos(buffer);
         coincidencias = buscar_cliente(buffer, 'a');
         if(coincidencias == NULL){
           printf("no se han encontrado coincidencias para %s\n", buffer);

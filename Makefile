@@ -17,7 +17,7 @@ lista.o: lista.c hash.h
 pila.o: pila.c hash.h
 	gcc -c pila.c
 
-interfaz.o: interfaz.c hash.h
+interfaz.o: interfaz.c hash.h pila.h
 	gcc -c interfaz.c
 
 main.o: main.c hash.h lista.h pila.h interfaz.h

@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "hash.h"
 #include "interfaz.h"
+#include "pila.h"
 
 void imprime_apellidos(char desde, char hasta){
   int inf = toupper(desde) - 65;
@@ -19,17 +20,19 @@ void imprime_apellidos(char desde, char hasta){
   }
 }
 
-void imprime_lista(struct cliente* it){
-
+int imprime_lista(struct cliente* it){
+  int indice = 1;
+  printf("\n");
   while(it != NULL){
-  printf("---------------------------------\n");
-  printf("| cliente:  %s %s\n", it->nombre,it->apellido);
-  printf("|                 \n");
-  printf("| id:       %i\n",it->id);
-  printf("----------------------------------\n\n");
+  printf("  [%i]--------------------------------\n",indice);
+  printf("  | cliente:  %s %s\n", it->nombre,it->apellido);
+  printf("  |                 \n");
+  printf("  | id:       %i\n",it->id);
+  printf("  -----------------------------------\n\n");
   it = it->next;
+  indice++;
   }
-
+  return indice;
 }
 
 void imprime_transacciones(struct transaccion* it){
@@ -51,11 +54,12 @@ void imprime_cliente(struct cliente* cliente){
   if(cliente == NULL){
     printf("el cliente no extiste\n");
   }else{
-    printf("Cliente:   %s %s\n", cliente->nombre,cliente->apellido);
-    printf("id:        %i\n",cliente->id);
-    printf("genero:    %s\n", cliente->genero);
-    printf("mail:      %s\n", cliente->mail);
-    printf("direccion: %s\n", cliente->direccion);
+    printf("Cliente:    %s %s\n", cliente->nombre,cliente->apellido);
+    printf("id:         %i\n",cliente->id);
+    printf("genero:     %s\n", cliente->genero);
+    printf("mail:       %s\n", cliente->mail);
+    printf("direccion:  %s\n", cliente->direccion);
+    printf("En cuenta:  $ %i\n", total_cuenta(cliente->transacciones));
   }
 }
 
@@ -73,7 +77,7 @@ void mensaje_feedback(char mensaje[200]){
 }
 
 int pide_opcion(int rango){
-  int opcion;
+  int opcion = 0;
   fflush(stdin);
   scanf("%i", &opcion);
   while((opcion > rango) || (opcion < 1)){

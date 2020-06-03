@@ -35,6 +35,11 @@ int remover_elemento_hash(char apellido[200], int rut){
   int indice_abecedario = toupper(apellido[0]) - 65;
 
   if((strcmp(hash_apellido[indice_abecedario]->apellido, apellido) == 0) && (hash_apellido[indice_abecedario]->id == rut)){ //Si es que coincide con el primero en el bucket
+    if(total_cuenta(hash_apellido[indice_abecedario]->transacciones) != 0){
+      printf("La cuenta del cliente todavia tiene dinero: No se puede eliminar\n");
+      pausa_enter();
+      return 0;
+    }
     struct cliente* tmp = hash_apellido[indice_abecedario]->next;
     free(hash_apellido[indice_abecedario]);
     hash_apellido[indice_abecedario] = tmp;
@@ -49,6 +54,11 @@ int remover_elemento_hash(char apellido[200], int rut){
       pausa_enter();
       return 0;
     }else{
+      if(total_cuenta(it->next->transacciones) != 0){
+        printf("La cuenta del cliente todavia tiene dinero: No se puede eliminar\n");
+        pausa_enter();
+        return 0;
+      }
       struct cliente* tmp = it->next->next;
       liberar_pila(it->next->transacciones);
       free(it->next);
