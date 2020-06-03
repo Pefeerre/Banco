@@ -60,6 +60,7 @@ void imprime_cliente(struct cliente* cliente){
     printf("mail:       %s\n", cliente->mail);
     printf("direccion:  %s\n", cliente->direccion);
     printf("En cuenta:  $ %i\n", total_cuenta(cliente->transacciones));
+    imprime_transacciones(cliente->transacciones);
   }
 }
 

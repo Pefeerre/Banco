@@ -32,9 +32,9 @@ int remover_elemento_pila(struct transaccion** transacciones){
     return 0;
 
   }else{
-    struct transaccion* tmp = (*transacciones)->next;
-    free(*transacciones);
-    *transacciones = tmp;
+    struct transaccion* tmp = (*transacciones);
+    *transacciones = (*transacciones)->next;
+    free(tmp);
   }
   return 1;
 }

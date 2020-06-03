@@ -249,6 +249,10 @@ int main(void){
         }
         if(remover_elemento_pila(&(seleccion->transacciones))){
           mensaje_feedback("ultima transaccion ha sido removida\n");
+          printf("lista de transacciones:\n");
+          imprime_transacciones(seleccion->transacciones);
+          printf("total en cuenta: $ %i\n",total_cuenta(seleccion->transacciones));
+          pausa_enter();
         }
         break;
       case 9:
