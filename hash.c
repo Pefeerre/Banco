@@ -34,7 +34,7 @@ void liberar_hash(){
 int remover_elemento_hash(char apellido[200], int rut){
   int indice_abecedario = toupper(apellido[0]) - 65;
 
-  if((strcmp(hash_apellido[indice_abecedario]->apellido, apellido) == 0) && (hash_apellido[indice_abecedario]->next->id == rut)){ //Si es que coincide con el primero en el bucket
+  if((strcmp(hash_apellido[indice_abecedario]->apellido, apellido) == 0) && (hash_apellido[indice_abecedario]->id == rut)){ //Si es que coincide con el primero en el bucket
     struct cliente* tmp = hash_apellido[indice_abecedario]->next;
     free(hash_apellido[indice_abecedario]);
     hash_apellido[indice_abecedario] = tmp;
