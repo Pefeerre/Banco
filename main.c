@@ -229,6 +229,7 @@ int main(void){
       case 6: // Eliminar ultima transaccion
         printf("Ingrese el apellido del cliente: ");
 
+        int n_coincidencias;
         scanf("%s", buffer);
         Formato_Titulos(buffer);
         coincidencias = buscar_cliente(buffer, 'a');
@@ -237,14 +238,16 @@ int main(void){
           pausa_enter();
           break;
         }else{
-          imprime_lista(coincidencias);
+          n_coincidencias = imprime_lista(coincidencias);
         }
 
-        printf("Ingrese el RUT del cliente:\n");
-
-        scanf("%i",&bufferid);
-        coincidencias = buscar_por_id(bufferid);
-        if(remover_elemento_pila(&(coincidencias->transacciones))){
+        printf("seleccione al cliente:\n");
+        struct cliente* seleccion = coincidencias;
+        int opcion6 = pide_opcion(n_coincidencias);
+        for(int i = 1; i < opcion6; i++){
+          seleccion = seleccion->next;
+        }
+        if(remover_elemento_pila(&(seleccion->transacciones))){
           mensaje_feedback("ultima transaccion ha sido removida\n");
         }
         break;

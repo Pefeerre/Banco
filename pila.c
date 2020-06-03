@@ -28,7 +28,7 @@ void agregar_elemento_pila(struct transaccion** transacciones, int codigo, long 
 int remover_elemento_pila(struct transaccion** transacciones){
 
   if(*transacciones == NULL){
-    printf("no hay transacciones por remover");
+    printf("no hay transacciones por remover\n");
     return 0;
 
   }else{
