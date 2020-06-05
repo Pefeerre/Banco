@@ -107,7 +107,7 @@ int pide_opcion(int rango){
   while((opcion > rango) || (opcion < 1)){
     printf("opcion no valida, intente otra vez:\n");
     scanf("%i", &opcion);
-    fflush(stdin); 
+    fflush(stdin);
   }
   return opcion;
 }
@@ -120,8 +120,9 @@ void Formato_Titulos(char titulo[100]){
   char Titulo[100];
   int i;
   Titulo[0] = toupper(titulo[0]);
-  for(i = 1; i < strlen(titulo); i++){
-    Titulo[i] = tolower(titulo[i]);
+  for(i = 1; i < strlen(titulo) && i < 100; i++){
+    if(titulo[i-1] == ' ') Titulo[i] = toupper(titulo[i]);
+    else Titulo[i] = tolower(titulo[i]);
   }
   while(i < 100){
     Titulo[i] = 0;

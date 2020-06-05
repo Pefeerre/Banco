@@ -67,7 +67,6 @@ int main(void){
         printf("agregar cliente:\n");
         struct cliente *nuevo = malloc(sizeof(struct cliente));
 
-        while( getchar() != '\n');
         printf("\n rut (sin puntos ni guion): ");
         scanf("%i-", &(nuevo->id));
 
@@ -92,7 +91,8 @@ int main(void){
 
         while( getchar() != '\n');
         printf("\n Direccion: ");
-        scanf("%s", nuevo->direccion);
+        siguente_elemento(stdin, nuevo->direccion);
+        Formato_Titulos(nuevo->direccion);
 
         crear_pila(&(nuevo->transacciones));
 
@@ -254,9 +254,9 @@ int main(void){
           pausa_enter();
         }
         break;
-      
+
       case 7:
-        
+
         printf("Ingrese el monto minimo de deposito:");
         scanf("%i", &bufferint);
 
@@ -265,7 +265,7 @@ int main(void){
         monto_minimo(&lista_min, bufferint);
         imprime_lista(lista_min);
         pausa_enter();
-        
+
         break;
 
       case 8:
