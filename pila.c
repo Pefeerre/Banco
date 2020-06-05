@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "hash.h"
 #include "pila.h"
+#include "lista.h"
 
 
 void crear_pila(struct transaccion** transacciones){
@@ -60,4 +61,36 @@ int total_cuenta(struct transaccion *transacciones){
     it = it->next;
   }
   return total;
+}
+
+void monto_minimo(struct cliente** lista, int monto_min){
+  
+  struct cliente *it;
+
+  for(int i = 0; i<26; i++){
+      it = hash_apellido[i];
+      while(it != NULL){
+        if(it->transacciones != NULL){
+          if(it->transacciones->codigo_operacion == 101 && it->transacciones->monto > monto_min){
+          agregar_elemento_lista(lista, it);
+          }
+        }
+        it = it->next; 
+      }
+  }
+}
+
+void monto_maximo(struct cliente** lista){
+
+  struct cliente *it;
+  for(int i = 0; i<26; i++){
+    it = hash_apellido[i];
+    while(it != NULL){
+      
+      if(it->transacciones != NULL){
+        agregar_elemento_ordenado(lista, it);
+      }
+      it = it->next; 
+    }
+  } 
 }

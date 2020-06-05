@@ -24,13 +24,25 @@ int imprime_lista(struct cliente* it){
   int indice = 1;
   printf("\n");
   while(it != NULL){
-  printf("  [%i]--------------------------------\n",indice);
-  printf("  | cliente:  %s %s\n", it->nombre,it->apellido);
-  printf("  |                 \n");
-  printf("  | id:       %i\n",it->id);
-  printf("  -----------------------------------\n\n");
-  it = it->next;
-  indice++;
+    imprime_cliente(it,indice);
+    it = it->next;
+    indice++;
+  }
+  return indice;
+}
+
+int imprime_lista_detalle(struct cliente* it, int cantidad_clientes){
+  int indice = 1;
+  printf("\n");
+  while(it != NULL && indice<cantidad_clientes+1){
+    printf("[%i]\n",indice);
+    imprime_cliente_detalle(it);
+    printf("\n");
+    it = it->next;
+    indice++;
+  }
+  if(indice<cantidad_clientes){
+    printf("\nNo hay mas clientes con transacciones para mostrar\n");
   }
   return indice;
 }
@@ -69,6 +81,7 @@ void imprime_cliente_detalle(struct cliente* cliente){
     printf("mail:       %s\n", cliente->mail);
     printf("direccion:  %s\n", cliente->direccion);
     printf("En cuenta:  $ %i\n", total_cuenta(cliente->transacciones));
+    printf("\n");
     printf("  Transacciones:\n");
     imprime_transacciones(cliente->transacciones);
   }
@@ -89,12 +102,12 @@ void mensaje_feedback(char mensaje[200]){
 
 int pide_opcion(int rango){
   int opcion = 0;
-  fflush(stdin);
   scanf("%i", &opcion);
+  while(getchar() != '\n');
   while((opcion > rango) || (opcion < 1)){
     printf("opcion no valida, intente otra vez:\n");
-    fflush(stdin);
     scanf("%i", &opcion);
+    fflush(stdin); 
   }
   return opcion;
 }

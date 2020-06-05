@@ -20,7 +20,7 @@ void siguente_elemento(FILE* archivo, char *a_rellenar);
 int main(void){
 
   char buffer[BUFF];
-  int bufferid;
+  int bufferint;
   int exit = 0;
   ESTADO_HASH = 0;
   struct cliente* seleccion;
@@ -34,7 +34,9 @@ int main(void){
     printf("3-  Buscar cliente\n");
     printf("4-  Eliminar cliente\n");
     printf("5-  Agregar transacciones\n");
-    printf("6-  Deshacer ultima trnasaccion cliente\n");
+    printf("6-  Deshacer ultima transaccion cliente\n");
+    printf("7-  Generar lista segun ultima transaccion\n");
+    printf("8-  Generar lista con los clientes con mas dinero\n");
     printf("9-  Cerrar programa\n");
 
     int opcion = pide_opcion(9);
@@ -119,7 +121,7 @@ int main(void){
             scanf("%s", buffer);
             Formato_Titulos(buffer);
             coincidencias = buscar_cliente(buffer, 'a',&n_coincidencias);
-            if(coincidencias == NULL){
+            if(*coincidencias == NULL){
               printf("no se han encontrado coincidencias para %s\n", buffer);
               pausa_enter();
               break;
@@ -137,7 +139,7 @@ int main(void){
             scanf("%s", buffer);
             Formato_Titulos(buffer);
             coincidencias = buscar_cliente(buffer, 'n', &n_coincidencias);
-            if(coincidencias == NULL){
+            if(*coincidencias == NULL){
               printf("no se han encontrado coincidencias para %s\n", buffer);
               pausa_enter();
               break;
@@ -152,10 +154,10 @@ int main(void){
           case 3: // buscar por id
             printf("ingrese id: ");
 
-            scanf("%i", &bufferid);
-            struct cliente* buscado  = buscar_por_id(bufferid);
+            scanf("%i", &bufferint);
+            struct cliente* buscado  = buscar_por_id(bufferint);
             if(coincidencias == NULL){
-              printf("no se han encontrado coincidencias para %i\n", bufferid);
+              printf("no se han encontrado coincidencias para %i\n", bufferint);
               pausa_enter();
               break;
             }else{
@@ -175,7 +177,7 @@ int main(void){
         scanf("%s", buffer);
         Formato_Titulos(buffer);
         coincidencias = buscar_cliente(buffer, 'a',&n_coincidencias);
-        if(coincidencias == NULL){
+        if(*coincidencias == NULL){
           printf("no se han encontrado coincidencias para %s\n", buffer);
           pausa_enter();
           break;
@@ -198,7 +200,7 @@ int main(void){
         scanf("%s", buffer);
         Formato_Titulos(buffer);
         coincidencias = buscar_cliente(buffer, 'a',&n_coincidencias);
-        if(coincidencias == NULL){
+        if(*coincidencias == NULL){
           printf("no se han encontrado coincidencias para %s\n", buffer);
           pausa_enter();
           break;
@@ -234,7 +236,7 @@ int main(void){
         scanf("%s", buffer);
         Formato_Titulos(buffer);
         coincidencias = buscar_cliente(buffer, 'a',&n_coincidencias);
-        if(coincidencias == NULL){
+        if(*coincidencias == NULL){
           printf("no se han encontrado coincidencias para %s\n", buffer);
           pausa_enter();
           break;
@@ -252,6 +254,33 @@ int main(void){
           pausa_enter();
         }
         break;
+      
+      case 7:
+        
+        printf("Ingrese el monto minimo de deposito:");
+        scanf("%i", &bufferint);
+
+        struct cliente* lista_min;
+        crear_lista(&lista_min);
+        monto_minimo(&lista_min, bufferint);
+        imprime_lista(lista_min);
+        pausa_enter();
+        
+        break;
+
+      case 8:
+
+        printf("Ingrese el numero de clientes que desea ver:");
+        scanf("%i", &bufferint);
+
+        struct cliente* lista_top;
+        crear_lista(&lista_top);
+        monto_maximo(&lista_top);
+        imprime_lista_detalle(lista_top, bufferint);
+        pausa_enter();
+
+        break;
+
       case 9:
         exit = 1;
         system("clear");
@@ -268,6 +297,7 @@ int main(void){
 struct cliente** buscar_cliente(char palabra_clave[100], char tipo_de_busqueda, int *n_coincidencias){
 //crea un arreglo de punteros de los elementos del hash que coincidan
   struct cliente** coincidencias = malloc(BUF_COINCIDENCIAS*sizeof(struct cliente*));
+  *coincidencias = NULL;
   struct cliente* it;
   *n_coincidencias = 0;
   if(tipo_de_busqueda == 'n'){ //busqueda por nombre
@@ -330,6 +360,7 @@ int leer_archivo(char *nombre_archivo){
 
   if(archivo == NULL){
   printf("No se encuentra el archivo %s\n", nombre_archivo);
+  pausa_enter();
   return -1;
   }
 
