@@ -7,7 +7,6 @@
 #include "lista.h"
 #include "interfaz.h"
 
-
 void agregar_elemento_hash(struct cliente* nuevo){
 
   int indice_abecedario = toupper(nuevo->apellido[0]) - 65;        //codigo ASCII a indices del 0 al 25

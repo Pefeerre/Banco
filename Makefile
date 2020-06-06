@@ -11,7 +11,7 @@ Banco: main.o hash.o lista.o pila.o interfaz.o
 hash.o: hash.c lista.h pila.h interfaz.h
 	gcc -c hash.c
 
-lista.o: lista.c hash.h
+lista.o: lista.c hash.h pila.h
 	gcc -c lista.c
 
 pila.o: pila.c hash.h

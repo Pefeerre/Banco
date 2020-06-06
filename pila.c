@@ -64,9 +64,8 @@ int total_cuenta(struct transaccion *transacciones){
 }
 
 void monto_minimo(struct cliente** lista, int monto_min){
-  
-  struct cliente *it;
 
+  struct cliente *it;
   for(int i = 0; i<26; i++){
       it = hash_apellido[i];
       while(it != NULL){
@@ -75,7 +74,7 @@ void monto_minimo(struct cliente** lista, int monto_min){
           agregar_elemento_lista(lista, it);
           }
         }
-        it = it->next; 
+        it = it->next;
       }
   }
 }
@@ -86,11 +85,10 @@ void monto_maximo(struct cliente** lista){
   for(int i = 0; i<26; i++){
     it = hash_apellido[i];
     while(it != NULL){
-      
       if(it->transacciones != NULL){
         agregar_elemento_ordenado(lista, it);
       }
-      it = it->next; 
+      it = it->next;
     }
-  } 
+  }
 }

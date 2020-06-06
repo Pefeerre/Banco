@@ -187,7 +187,7 @@ int main(void){
         int opcion4 = pide_opcion(n_coincidencias);
         seleccion = coincidencias[opcion4-1];
 
-        if(remover_elemento_hash(seleccion->apellido,seleccion->id)){
+        if(remover_elemento_hash(seleccion->apellido, seleccion->id)){
           mensaje_feedback("Cliente eliminado satisfactoriamente\n");
         }
 
@@ -263,7 +263,7 @@ int main(void){
         struct cliente* lista_min;
         crear_lista(&lista_min);
         monto_minimo(&lista_min, bufferint);
-        imprime_lista(lista_min);
+        imprime_lista_detalle(lista_min, 20);//imprime los primeros 20
         pausa_enter();
 
         break;

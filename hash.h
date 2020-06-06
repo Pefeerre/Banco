@@ -19,6 +19,6 @@ void crear_hash();
 void agregar_elemento_hash(struct cliente* nuevo);
 int remover_elemento_hash(char apellido[200], int rut);
 void liberar_hash();
-int ESTADO_HASH; //indica si el hash ya está creado
+int ESTADO_HASH; // indica si el hash ya está creado
 
-struct cliente* hash_apellido[26];  //cada espacio de este arreglo representa una letra del abecedario de forma ordenada.
+struct cliente* hash_apellido[26];  // cada espacio de este arreglo representa una letra del abecedario de forma ordenada.

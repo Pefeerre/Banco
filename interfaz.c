@@ -88,10 +88,8 @@ void imprime_cliente_detalle(struct cliente* cliente){
 }
 
 void pausa_enter(){
-
   while( getchar() != '\n');
   getchar();
-
 }
 
 void mensaje_feedback(char mensaje[200]){

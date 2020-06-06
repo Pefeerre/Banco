@@ -49,6 +49,10 @@ int agregar_elemento_ordenado(struct cliente** lista, struct cliente *elemento){
   if(*lista == NULL){
     *lista = nuevo_elemento;
     nuevo_elemento->next = NULL;
+  }else if( total_cuenta((*lista)->transacciones) < total_cuenta(nuevo_elemento->transacciones)){
+    struct cliente *tmp = *lista;
+    *lista = nuevo_elemento;
+    nuevo_elemento->next = tmp;
   }else{
     struct cliente* it = *lista;
     while(it->next != NULL ){
